@@ -137,7 +137,7 @@ This demonstrates measured performance change from run_1 to run_2 with better st
 
 ### Trajectory Tracking
 
-![Trajectory Comparison](results/run_2/plots/1_trajectory_comparison.png)
+![Trajectory Comparison](results/run_2/plots/trajectory_comparison.png)
 
 EKF estimated trajectory (blue) vs CARLA ground truth (black dashed) over a full autonomous run in Town01. The filter maintains sub-metre tracking fidelity across both straight sections and corners.
 
@@ -145,7 +145,7 @@ EKF estimated trajectory (blue) vs CARLA ground truth (black dashed) over a full
 
 ### Localization Error Over Time
 
-![Error Over Time](results/run_2/plots/2_error_over_time.png)
+![Error Over Time](results/run_2/plots/error_over_time.png)
 
 Position error over the duration of the run. Spikes are correlated with sharp corners — a predictable consequence of the GNSS update rate (1 Hz) creating a brief prediction-only window while the vehicle is actively changing heading. This is the primary motivation for upgrading to ES-EKF in V5.
 
@@ -153,7 +153,7 @@ Position error over the duration of the run. Spikes are correlated with sharp co
 
 ### Jerk Heatmap — Lateral vs Longitudinal
 
-![Jerk Heatmap](results/run_2/plots/4_jerk_heatmap.png)
+![Jerk Heatmap](results/run_2/plots/jerk_heatmap.png)
 
 2D density of lateral and longitudinal jerk over the full run. Concentration near the origin confirms the jerk limiter and cornering speed adaptation are working correctly. Outliers correspond to traffic light stop events.
 
@@ -161,7 +161,7 @@ Position error over the duration of the run. Spikes are correlated with sharp co
 
 ### EKF Error Map
 
-![EKF Error Map](results/run_2/plots/5_ekf_error_map.png)
+![EKF Error Map](results/run_2/plots/ekf_error_map.png)
 
 Estimated trajectory coloured by instantaneous position error (m). Error accumulates at corner entries and dissipates rapidly once GNSS correction arrives — consistent with the expected behaviour of a predict-heavy filter operating at a low GNSS rate.
 
