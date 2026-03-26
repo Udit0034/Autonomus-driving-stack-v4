@@ -121,16 +121,16 @@ All plots are generated automatically by `evaluation_ros2.py` after each run.
 
 ### Run Results Summary
 
-Metric              | Current Value   | vs Previous
-------------------------------------------------------------
-EKF RMSE            |   5.297 m      | ↑ 7.9%
-EKF Mean Error      |   3.258 m      | ~ 0.2%
-EKF Max Error       |  18.438 m      | ↑ 14.7%
-Avg Speed           |   5.761 m/s    | ↓ 1.3%
-Avg |jerk|          |  12.477 m/s³   | ↓ 89.9%
-Max |jerk|          | 497.490 m/s³   | ↓ 81.9%
-RMS jerk            |  30.941 m/s³   | ↓ 87.2%
-------------------------------------------------------------
+Metric | Current Value | vs Previous
+--- | --- | ---
+EKF RMSE | 5.297 m | ↑ 7.9%
+EKF Mean Error | 3.258 m | ~ 0.2%
+EKF Max Error | 18.438 m | ↑ 14.7%
+Avg Speed | 5.761 m/s | ↓ 1.3%
+Avg \|jerk\| | 12.477 m/s³ | ↓ 89.9%
+Max \|jerk\| | 497.490 m/s³ | ↓ 81.9%
+RMS jerk | 30.941 m/s³ | ↓ 87.2%
+
 Duration: 268.8s | Samples: 67330
 
 This demonstrates measured performance change from run_1 to run_2 with better stability, including run_2 incorporating a magnetometer for heading correction.
