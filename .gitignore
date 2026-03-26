@@ -1,0 +1,16 @@
+# ROS 2 Build/Install Folders (NEVER push these!)
+build/
+install/
+log/
+
+# Python Cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# VS Code / DevContainer stuff
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db

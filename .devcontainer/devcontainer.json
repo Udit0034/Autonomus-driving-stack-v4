@@ -1,0 +1,17 @@
+{
+  "name": "ROS2 Humble Dev",
+  "dockerComposeFile": "../docker/docker-compose.yml",
+  "service": "ros2",
+  "workspaceFolder": "/workspace",
+
+  "runArgs": ["--gpus", "none"],
+
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+
+  "extensions": [
+    "ms-python.python",
+    "ms-iot.vscode-ros"
+  ]
+}
