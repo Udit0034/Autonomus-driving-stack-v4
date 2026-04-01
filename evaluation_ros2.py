@@ -17,6 +17,7 @@ def get_latest_run_dir():
     return f"/workspace/results/run_{latest_run}"
 
 def run_evaluation(run_dir):
+    """Run full evaluation on last run and generate plots and metric file for easy visualization of latest run"""
     print(f"\n--- Running Full ROS 2 Evaluation Suite in {run_dir} ---")
     os.makedirs(f'{run_dir}/plots', exist_ok=True)
 
@@ -134,9 +135,9 @@ def run_evaluation(run_dir):
     with open(f'{run_dir}/metrics.json', 'w') as f:
         json.dump(metrics, f, indent=4)
         
-    print(f"✅ Generated 5 plots in {run_dir}/plots/")
-    print(f"✅ Evaluated {int(metrics['samples'])} samples over {metrics['duration_s']:.1f}s")
-    print(f"✅ Final RMSE: {metrics['rmse_pos']:.3f}m | Max Jerk: {metrics['max_jerk']:.3f} m/s³")
+    print(f"Generated 5 plots in {run_dir}/plots/")
+    print(f"Evaluated {int(metrics['samples'])} samples over {metrics['duration_s']:.1f}s")
+    print(f"Final RMSE: {metrics['rmse_pos']:.3f}m | Max Jerk: {metrics['max_jerk']:.3f} m/s³")
 
 if __name__ == '__main__':
     # Auto-find the newest run directory

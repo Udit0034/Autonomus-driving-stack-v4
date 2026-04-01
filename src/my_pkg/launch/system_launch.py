@@ -3,6 +3,7 @@ from launch.actions import TimerAction
 from launch_ros.actions import Node
 
 def generate_launch_description():
+    """Launch file to start nodes in the correct order for communication."""
     
     # 1. The Bridge (Starts immediately at T=0)
     carla_node = Node(

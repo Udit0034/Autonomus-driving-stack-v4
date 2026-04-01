@@ -2,6 +2,7 @@ import os
 import json
 
 def compare_runs():
+    """Compare previous two runs to get a better understanding of the effect of tuning and logic changes"""
     print("\n=== Simulation Metrics Comparison ===")
     
     RESULTS_DIR = '/workspace/results'

@@ -7,17 +7,19 @@ import math
 
 RESULTS_DIR = '/workspace/results'
 
-# --- Helper Function to get Yaw ---
+
 def quaternion_to_yaw(q):
+    """Helper function to get yaw form quaternion"""
     siny_cosp = 2.0 * (q.w * q.z + q.x * q.y)
     cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
     return math.atan2(siny_cosp, cosy_cosp)
 
 class LoggerNode(Node):
+    """Logs odometry data and ekf prediction for later evaluation and comparison """
     def __init__(self):
         super().__init__('logger_node')
 
-        # --- Sequential Run Directory Logic ---
+        # Making next run dir
         os.makedirs(RESULTS_DIR, exist_ok=True)
         existing_runs = [d for d in os.listdir(RESULTS_DIR) if d.startswith('run_')]
         run_nums = []
@@ -30,7 +32,7 @@ class LoggerNode(Node):
         self.run_dir = os.path.join(RESULTS_DIR, f"run_{next_run}")
         os.makedirs(self.run_dir, exist_ok=True)
 
-        # --- CSV Files ---
+        # creating csv file 
         self.odom_file = open(f"{self.run_dir}/odom_data.csv", "w", newline="")
         self.ekf_file = open(f"{self.run_dir}/ekf_data.csv", "w", newline="")
 
@@ -45,12 +47,14 @@ class LoggerNode(Node):
         self.create_subscription(Odometry, '/odom_gt', self.odom_callback, 10)
         self.create_subscription(Odometry, '/estimated_state', self.ekf_callback, 10)
 
-        self.get_logger().info(f"Logging telemetry to {self.run_dir} 📊")
+        self.get_logger().info(f"Logging telemetry to {self.run_dir} ")
 
     def get_time(self, msg):
+        """Return stitched tick back time by adding sec and nanosec from msg.header"""
         return msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
 
     def odom_callback(self, msg):
+        '''Get odometry data from msg by /odom_gt topic and write timestamp , x position, y position, linear velocity, and yaw (converted into euler from quaternion)'''
         t = self.get_time(msg)
         x = msg.pose.pose.position.x
         y = msg.pose.pose.position.y
@@ -60,6 +64,7 @@ class LoggerNode(Node):
         self.odom_writer.writerow([t, x, y, v, yaw])
 
     def ekf_callback(self, msg):
+        '''Get predicted odometry data from msg by /estimated_state topic and write timestamp , x position, y position, linear velocity, and yaw (converted into euler from quaternion)'''
         t = self.get_time(msg)
         x = msg.pose.pose.position.x
         y = msg.pose.pose.position.y
@@ -69,6 +74,7 @@ class LoggerNode(Node):
         self.ekf_writer.writerow([t, x, y, v, yaw])
 
 def main():
+    """Main function to run node properly and exit without error"""
     try:
         rclpy.init()
         node = LoggerNode()

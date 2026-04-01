@@ -8,8 +8,9 @@ import math
 
 from agents.navigation.basic_agent import BasicAgent
 
-# --- Helper Function ---
+
 def quaternion_to_yaw(q):
+    """Helper function to extract the yaw (heading) angle from a ROS 2 Quaternion."""
     x = q.x
     y = q.y
     z = q.z
@@ -18,7 +19,7 @@ def quaternion_to_yaw(q):
     cosy_cosp = 1.0 - 2.0 * (y * y + z * z)
     return math.atan2(siny_cosp, cosy_cosp)
 
-# ==== CUSTOM PID CLASSES ====
+
 class PIDController:
     """PID controller with integral anti-windup clamping."""
     def __init__(self, kp: float, ki: float, kd: float,
@@ -82,7 +83,7 @@ class LongitudinalController:
 
         # 3. Target speed rate limiter (prevents abrupt jumps)
         if self._prev_target_speed is not None:
-            rate = 10.0 if self._emergency else 2.0
+            rate = 10.0 if self._emergency else 3.0
             max_change = rate * dt
             target_speed = max(self._prev_target_speed - max_change,
                                min(self._prev_target_speed + max_change, target_speed))
@@ -135,8 +136,13 @@ class LateralController:
         # Compute PID steering command
         return self._pid.compute(error, dt)
 
-# ==== ROS 2 WRAPPER NODE ====
 class ControlNode(Node):
+    """
+    The main controler of the autonomous stack. 
+    Subscribes to the EKF /estimated_state to bypass noisy raw sensors.
+    Uses CARLA's BasicAgent for high-level routing and hazard detection, 
+    and applies custom Longitudinal and Lateral PID control to drive the vehicle.
+    """
     def __init__(self):
         super().__init__('control_node')
 
@@ -178,9 +184,12 @@ class ControlNode(Node):
         self.create_subscription(Odometry, '/estimated_state', self.state_callback, 10)
 
         self.last_time = None
-        self.get_logger().info("Control Node Started! 🚗 (Auto Mode Engaged)")
+        self.get_logger().info("Control Node Started!")
 
     def state_callback(self, msg):
+        """Main control loop triggered by the EKF state update. 
+        Calculates steering, throttle, and braking using waypoint look-ahead 
+        and a dynamic cornering speed limiter."""
         t = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
 
         if self.last_time is None:
